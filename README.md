@@ -225,11 +225,11 @@ https://ci.android.com/builds/branches/aosp-main/grid?legacy=1
 
 https://github.com/xmikos/setools-android
 
-对于编辑SELinux规则，参考文献：
+对于编辑SELinux规则，参考文献(仅作为出处引用)：
 
 https://android.stackexchange.com/questions/218911/how-to-add-selinux-policy-on-a-user-debug-rom-that-has-split-policy-scheme
 
-对于三星Galaxy S24设备，必须使用特定的lz4压缩指令，且必须压缩为"super.img.lz4"文件，才可以使任何SUPER镜像在Odin移动端和PC端均被接受。参考文献：
+对于三星Galaxy S24设备，必须使用特定的lz4压缩指令，且必须压缩为"super.img.lz4"文件，才可以使任何SUPER镜像在Odin移动端和PC端均被接受。参考文献(仅作为出处引用)：
 
 https://github.com/lz4/lz4/issues/802
 
@@ -288,7 +288,7 @@ https://github.com/meefik/busybox
 
 **08 安卓属性值**
 
-一些安卓应用会使用getprop的简单方式来判断运行环境是否安全。它们通常会检查以下参数：
+一些安卓应用会使用getprop的简单方式来判断运行环境是否安全。它们通常会检查以下属性值：
 
 ```
 getprop ro.boot.verifiedbootstate
@@ -299,7 +299,7 @@ getprop ro.vendor.boot.warranty_bit
 
 此时，我们需要恢复BL解锁前的状态值。在"三丧A226B"项目中，我们修改了init2，使setprop命令可以应用于任何属性，包括ro属性，进行概念验证。但在实践中，应用也可通过执行"setprop ro.*"来判定环境不安全。
 
-安卓运行时属性值存放于"/dev/__properties__"目录。我们可以通过以下项目中的第三方可执行文件，对需要的属性值进行修改：
+安卓运行时属性值存放于"/dev/\_\_properties\_\_"目录。我们可以通过以下项目中的第三方可执行文件，对需要的属性值进行修改：
 
 https://github.com/liwugang/android_properties
 
@@ -323,7 +323,19 @@ if (fd_stat.st_size != AREA_SIZE) {
 
 ---
 
-**10 可能的用途**
+**10 已测试的应用**
+
+BL解锁后，在此定制环境下：
+
+- 微信、支付宝、淘宝APP登录和使用正常。
+
+- 支付宝指纹付款正常。
+
+- Google Play商店指纹付款正常。
+
+---
+
+**11 可能的用途**
 
 费了这么半天劲手搓出来的Linux root执行权限，我们可以用来做什么呢？一些创意有：
 
@@ -333,13 +345,15 @@ if (fd_stat.st_size != AREA_SIZE) {
 
 - 一键隐藏特定的应用和数据，比如有好看的小姐姐要求加好友推销产品时，委婉地拒绝"我没有微信，没法扫码"。
 
+- 制造APP不兼容的假象，比如推销小姐姐一定要你安装微信APP、并注册登录时，可以在后台循环根据包名结束进程。
+
 - 在后台创建长连接tun隧道，配合路由表，即使在使用5G移动网络时，也可以在不使用安卓VPN功能(无VPN客户端、无VPN图标)的情况下，使用卢森堡的IP地址下载盗版电影，从而避免被DMCA。
 
-- 设置照片自动备份，比如追星拍照后，保安大哥让删除，照片表面上删除了、也清空了回收站，可实际当按下快门后，早已自动备份到了指定目录。
+- 设置照片自动备份，比如追星拍照后，保安大哥让删除，照片表面上删除了、也清空了回收站，可实际当按下快门的那一刻，早已自动备份到了指定目录。
 
 - 紧急情况下，例如朋友聚餐不想结帐，一键擦除boot分区，快速销毁内核，装作手机坏了。回家拿Odin再把内核刷回去，手机又完美工作。
 
-- 紧急情况下，例如老婆快要翻到婚外恋的证据，连按5次音量按钮，快速数据自毁(metadata分区填零)，整机格式化。即使老婆请来了最顶尖的技术专家也无济于事，保住了家庭。
+- 紧急情况下，例如老婆快要翻到婚外恋的证据，连按5次音量按钮，快速数据自毁(只要把metadata分区填零就可以了)，整机格式化。即使老婆请来了最顶尖的技术专家也无济于事，保住了家庭。
 
 # 说人话
 
