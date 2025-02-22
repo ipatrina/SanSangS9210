@@ -32,6 +32,8 @@ https://github.com/MatrixEditor/samloader3
 
 例如，选择中国香港版本工厂固件(S9210ZHS4AXL4)文件进行工作：SM-S9210_1_20250114074310_0w8z2usw5k_fac.zip
 
+---
+
 **02 写入版本文件**
 
 在解BL锁前，您可以先将带有官方签名的目标软件版本，使用Odin下载工具写入设备。
@@ -40,11 +42,15 @@ https://github.com/MatrixEditor/samloader3
 
 https://xdaforums.com/t/patched-odin-3-13-1.3762572
 
+---
+
 **03 解锁引导加载程序**
 
 在"开发者选项"中，拨开"OEM解锁"开关。在Odin下载模式中，解锁引导加载程序。
 
 这不会导致您的保修失效。
+
+---
 
 **04 编辑VBMETA**
 
@@ -53,6 +59,8 @@ https://xdaforums.com/t/patched-odin-3-13-1.3762572
 这将禁用AVB2.0校验，允许init1接受改动后的安卓系统文件。
 
 您需要将修改后的vbmeta.img、vbmeta_system.img打包为vbmeta-patched.tar文件。
+
+---
 
 **05 编辑SUPER**
 
@@ -225,6 +233,8 @@ https://android.stackexchange.com/questions/218911/how-to-add-selinux-policy-on-
 
 https://github.com/lz4/lz4/issues/802
 
+---
+
 **06 写入修改的文件**
 
 您需要将vbmeta-patched.tar、super-patched.tar使用Odin刷入设备。
@@ -234,6 +244,8 @@ https://github.com/lz4/lz4/issues/802
 如果您尚未决定放弃这些权益，请不要刷写修改后的vbmeta.img，这是您的最后选择机会。
 
 只有设备成功启动并加载了修改后的vbmeta.img(或boot.img、recovery.img等)，才会触发KNOX熔断。只是BL解锁不会导致KNOX熔断。
+
+---
 
 **07 驻守进程初始化**
 
@@ -272,6 +284,8 @@ https://github.com/meefik/busybox
 
 而login程序作为简易的telnet安全登录入口，已由"三丧A226B"项目介绍。
 
+---
+
 **08 安卓属性值**
 
 一些安卓应用会使用getprop的简单方式来判断运行环境是否安全。它们通常会检查以下参数：
@@ -299,11 +313,15 @@ if (fd_stat.st_size != AREA_SIZE) {
 }
 ```
 
+---
+
 **09 去除开机警告**
 
 搭载高通骁龙系列芯片的三星手机，无法去除开机警告。
 
 搭载联发科、Exynos芯片的三星手机，可以通过修改up_param分区来移除开机警告。
+
+---
 
 **10 可能的用途**
 
