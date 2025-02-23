@@ -321,6 +321,12 @@ if (fd_stat.st_size != AREA_SIZE) {
 
 搭载联发科、Exynos芯片的三星手机，可以通过编辑up_param分区来移除开机警告。
 
+高通平台ABL展示图片存放在imagefv分区，并可通过以下项目提取图像文件：
+
+https://github.com/LongSoft/UEFITool
+
+但imagefv分区经过UEFI签名保护。
+
 ---
 
 **10 已测试的应用**
@@ -335,7 +341,21 @@ BL解锁后，在此定制环境下：
 
 ---
 
-**11 可能的用途**
+**11 UFS分区规划**
+
+高通现已精简UFS闪存的LUN硬件分区规划，数量由6个LU减至4个LU(不含RPMB)，并全部使用GPT分区表。LBA大小为4096字节。
+
+LU0 - HLOS数据硬件分区 (modem, boot, recovery, super, metadata, userdata等)
+
+LU1 - BOOT1 (xbl, xbl_config等) [16 MB]
+
+LU2 - BOOT2 (xbl_b, xbl_config_b等) [16 MB]
+
+LU3 - 高通平台数据硬件分区 (abl, devcfg, tz, uefi等)
+
+---
+
+**12 可能的用途**
 
 费了这么半天劲手搓出来的Linux root执行权限，我们可以用来做什么呢？一些创意有：
 
@@ -364,6 +384,8 @@ BL解锁后，在此定制环境下：
 - 版本文件 --> 固件包
 
 - REE操作系统 --> 安卓系统
+
+- HLOS --> 安卓系统
 
 - 现代安卓手机 --> 系统版本不低于Android 10
 
