@@ -213,7 +213,7 @@ rm super.img.lz4
 
 对于simg2img、mkfs.erofs和lz4程序，请使用APT软件包管理器获取。
 
-对于imgtool程序，请从官方网站获取：
+对于imjtool程序，请从官方网站获取：
 
 https://newandroidbook.com/tools/imjtool.html
 
@@ -225,11 +225,11 @@ https://ci.android.com/builds/branches/aosp-main/grid?legacy=1
 
 https://github.com/xmikos/setools-android
 
-对于编辑SELinux规则，参考文献(仅作为出处引用)：
+对于编辑SELinux规则的思想，参考文献(仅作为引用)：
 
 https://android.stackexchange.com/questions/218911/how-to-add-selinux-policy-on-a-user-debug-rom-that-has-split-policy-scheme
 
-对于三星Galaxy S24设备，必须使用特定的lz4压缩指令，且必须压缩为"super.img.lz4"文件，才可以使任何SUPER镜像在Odin移动端和PC端均被接受。参考文献(仅作为出处引用)：
+对于三星Galaxy S24设备，必须压缩为"super.img.lz4"文件，且必须使用特定的lz4压缩指令，才可以使任何SUPER镜像在Odin移动端和PC端均被接受。参考文献(仅作为引用)：
 
 https://github.com/lz4/lz4/issues/802
 
