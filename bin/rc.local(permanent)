@@ -1,0 +1,8 @@
+#! /system/bin/sh
+
+/data/system_properties ro.boot.verifiedbootstate green
+/data/system_properties ro.boot.flash.locked 1
+/data/system_properties ro.boot.warranty_bit 0
+/data/system_properties ro.vendor.boot.warranty_bit 0
+
+/data/busybox telnetd -F -l /data/login
