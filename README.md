@@ -446,7 +446,7 @@ https://fota-cloud-dn.ospserver.net/firmware/TGY/SM-S9210/version.xml
 
 在2025年4月三星Galaxy S24设备的One UI 7.0 (Android 15)更新中，章节05中添加至precompiled_sepolicy文件的SELinux许可域不生效。这会导致我们的自定义RC服务无法被SELinux策略允许执行。
 
-当然，无论何时，您都可以通过"三丧A226B"项目中所提及的，破坏内核函数avc_denied()的方式，使SELinux失能，从而允许任何进程不受MAC控制，包括我们的自定义服务进程。
+当然，无论何时，您都可以通过"三丧A226B"项目中所提及的，破坏内核函数avc_denied()的方式，使SELinux失能，从而允许任何进程(不包括init)不受MAC控制，包括我们的自定义服务进程。
 
 但从生产环境角度考虑，安卓平台无法仅依靠DAC生存。我们依然需要探究precompiled_sepolicy无法生效的原因。
 
