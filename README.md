@@ -145,6 +145,7 @@ chcon --reference /system/system/etc/init/hw/init.rc /system/system/etc/rc.local
 rm -r /system/system/app/SmartSwitchAgent
 rm -r /system/system/app/SmartSwitchStub
 rm -r /system/system/app/SamsungPassAutofill_v1
+rm -r /system/system/app/FBAppManager_NS
 rm -r /system/system/priv-app/GalaxyApps_OPEN
 rm -r /system/system/priv-app/SamsungMessages
 rm -r /system/system/priv-app/SmartSwitchAssistant
@@ -152,6 +153,8 @@ rm -r /system/system/priv-app/SamsungPass
 rm -r /system/system/priv-app/OneDrive_Samsung_v3
 rm -r /system/system/priv-app/YourPhone_P1_5
 rm -r /system/system/priv-app/LinkToWindowsService
+rm -r /system/system/priv-app/FBInstaller_NS
+rm -r /system/system/priv-app/FBServices
 
 mkfs.erofs -zlz4hc system-patched.img /system
 
@@ -188,6 +191,20 @@ mount -t erofs -o loop odm.img /mnt/odm
 
 cp -a /mnt/odm /
 
+# Below commands only needed when chapter Android 15 applies to your case #
+
+mkdir /mnt/system; mkdir /mnt/system_ext; mkdir /mnt/product; mount -t erofs -o loop system.img /mnt/system; mount -t erofs -o loop system_ext.img /mnt/system_ext; mount -t erofs -o loop product.img /mnt/product
+
+cp /mnt/system/system/etc/selinux/plat_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.plat_sepolicy_and_mapping.sha256
+cp /mnt/system_ext/etc/selinux/system_ext_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.system_ext_sepolicy_and_mapping.sha256
+cp /mnt/product/etc/selinux/product_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.product_sepolicy_and_mapping.sha256
+
+umount /mnt/product; umount /mnt/system_ext; umount /mnt/system; rm -r /mnt/product; rm -r /mnt/system_ext; rm -r /mnt/system
+
+cp policy /odm/etc/selinux/precompiled_sepolicy
+
+################
+
 sepolicy-inject -Z shell -P /odm/etc/selinux/precompiled_sepolicy
 
 mkfs.erofs -zlz4hc odm-patched.img /odm
@@ -198,9 +215,7 @@ rm -r /mnt/odm
 
 rm -r /odm
 
-du -b system-patched.img odm-patched.img product-patched.img system_dlkm.img system_ext.img vendor.img vendor_dlkm.img | awk '{s+=$1} END {print s}'
-
-lpmake --metadata-size 65536 --device-size 13767802880 --metadata-slots 2 --group qti_dynamic_partitions:7961317376 --partition system:none:5245747200:qti_dynamic_partitions --partition odm:none:933888:qti_dynamic_partitions --partition product:none:632729600:qti_dynamic_partitions --partition system_dlkm:none:14946304:qti_dynamic_partitions --partition system_ext:none:85200896:qti_dynamic_partitions --partition vendor:none:1951760384:qti_dynamic_partitions --partition vendor_dlkm:none:29999104:qti_dynamic_partitions --image system=system-patched.img --image odm=odm-patched.img --image product=product-patched.img --image system_dlkm=system_dlkm.img --image system_ext=system_ext.img --image vendor=vendor.img --image vendor_dlkm=vendor_dlkm.img --sparse --output super-patched.img
+lpmake --metadata-size 65536 --device-size $(du -b ../super-raw.img | awk '{print $1}') --metadata-slots 2 --group qti_dynamic_partitions:$(du -b system-patched.img odm-patched.img product-patched.img system_dlkm.img system_ext.img vendor.img vendor_dlkm.img | awk '{s+=$1} END {print s}') --partition system:none:$(du -b system-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition odm:none:$(du -b odm-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition product:none:$(du -b product-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition system_dlkm:none:$(du -b system_dlkm.img | awk '{print $1}'):qti_dynamic_partitions --partition system_ext:none:$(du -b system_ext.img | awk '{print $1}'):qti_dynamic_partitions --partition vendor:none:$(du -b vendor.img | awk '{print $1}'):qti_dynamic_partitions --partition vendor_dlkm:none:$(du -b vendor_dlkm.img | awk '{print $1}'):qti_dynamic_partitions --image system=system-patched.img --image odm=odm-patched.img --image product=product-patched.img --image system_dlkm=system_dlkm.img --image system_ext=system_ext.img --image vendor=vendor.img --image vendor_dlkm=vendor_dlkm.img --sparse --output super-patched.img
 
 lz4 -B6 --content-size super-patched.img super.img.lz4
 
@@ -426,6 +441,24 @@ https://fota-cloud-dn.ospserver.net/firmware/TGY/SM-S9210/version.xml
 版本号数字顺序为从1至9，然后从A至Z。
 
 所以，S9210ZHS4AXL4版本表示：S9210机型的中国香港版本，安全补丁更新，Bootloader版本4，安卓版本14，2024年12月第4版。
+
+# 安卓15
+
+在2025年4月三星Galaxy S24设备的One UI 7.0 (Android 15)更新中，章节05中添加至precompiled_sepolicy文件的SELinux许可域不生效。这会导致我们的自定义RC服务无法被SELinux策略允许执行。
+
+当然，无论何时，您都可以通过"三丧A226B"项目中所提及的，破坏内核函数avc_denied()的方式，使SELinux失能，从而允许任何进程不受MAC控制，包括我们的自定义服务进程。
+
+但从生产环境角度考虑，安卓平台无法仅依靠DAC生存。我们依然需要探究precompiled_sepolicy无法生效的原因。
+
+根据安卓官网说明，预编译的SELinux政策(precompiled_sepolicy)文件仅在三组SHA256哈希匹配后，才会被加载，否则会被即时重新编译：
+
+https://source.android.com/docs/security/features/selinux/build
+
+我们发现，三星Galaxy S24设备的Android 15固件中的三组SHA256竟不匹配，这就导致无论我们是否修改precompiled_sepolicy文件，其都不会在系统启动时被加载，而是会使用secilc即时编译SELinux政策文件。
+
+为了解决这一问题，我们可以暂时破坏avc_denied()，在安卓15环境下获得root命令行执行权限后，提取即时编译并加载的SELinux政策文件"/sys/fs/selinux/policy"。然后，在重新打包SUPER分区时，与三个SHA256哈希文件一同覆盖到"/odm/etc/selinux/*"。
+
+之所以需要让precompiled_sepolicy生效作为解决方案，是因为cil条目中不允许存在许可域，否则系统将阻止编译。
 
 # 说人话
 
