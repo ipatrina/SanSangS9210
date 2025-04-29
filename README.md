@@ -444,6 +444,8 @@ https://fota-cloud-dn.ospserver.net/firmware/TGY/SM-S9210/version.xml
 
 # 安卓15
 
+**SELinux政策文件**
+
 在2025年4月三星Galaxy S24设备的One UI 7.0 (Android 15)更新中，章节05中添加至precompiled_sepolicy文件的SELinux许可域不生效。这会导致我们的自定义RC服务无法被SELinux策略允许执行。
 
 当然，无论何时，您都可以通过"三丧A226B"项目中所提及的，破坏内核函数avc_denied()的方式，使SELinux失能，从而允许任何进程(不包括init)不受MAC控制，包括我们的自定义服务进程。
@@ -454,11 +456,27 @@ https://fota-cloud-dn.ospserver.net/firmware/TGY/SM-S9210/version.xml
 
 https://source.android.com/docs/security/features/selinux/build
 
-我们发现，三星Galaxy S24设备的Android 15固件中的三组SHA256竟不匹配，这就导致无论我们是否修改precompiled_sepolicy文件，其都不会在系统启动时被加载，而是会使用secilc即时编译SELinux政策文件。
+我们发现，三星Galaxy S24设备的Android 15固件中的三组SHA256哈希竟不匹配，这就导致无论我们是否修改precompiled_sepolicy文件，其都不会在系统启动时被加载，而是会使用secilc即时编译SELinux政策文件。
 
 为了解决这一问题，我们可以暂时破坏avc_denied()，在安卓15环境下获得root命令行执行权限后，提取即时编译并加载的SELinux政策文件"/sys/fs/selinux/policy"。然后，在重新打包SUPER分区时，与三个SHA256哈希文件一同覆盖到"/odm/etc/selinux/*"。
 
 之所以需要让precompiled_sepolicy生效作为解决方案，是因为cil条目中不允许存在许可域，否则系统将阻止编译。
+
+---
+
+**通话录音**
+
+One UI 7.0针对中国机型增加了原生通话录音功能，但会向通话方强制播放录音通知。
+
+您可以在"/data/user_de/0/com.samsung.android.incallui/shared_prefs/com.samsung.android.incallui_preferences.xml"文件中增加以下两个选项，方可激活"测试模式"中的"传统录音方式"，以禁用录音通知功能：
+
+```
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <boolean name="incallui_test_mode" value="true" />
+    <boolean name="record_call_original" value="true" />
+</map>
+```
 
 # 说人话
 
