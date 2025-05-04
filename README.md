@@ -442,6 +442,22 @@ https://fota-cloud-dn.ospserver.net/firmware/TGY/SM-S9210/version.xml
 
 所以，S9210ZHS4AXL4版本表示：S9210机型的中国香港版本，安全补丁更新，Bootloader版本4，安卓版本14，2024年12月第4版。
 
+# 说人话
+
+- 正向提权 --> 通过非漏洞方式获取root权限
+
+- 自主完全控制 --> 用root权限为所欲为
+
+- 版本文件 --> 固件包
+
+- REE操作系统 --> 安卓系统
+
+- HLOS --> 安卓系统
+
+- 现代安卓手机 --> 系统版本不低于Android 10
+
+- 主要移动工作环境 --> 日常使用的安卓主力机
+
 # 安卓15
 
 **SELinux政策文件**
@@ -462,11 +478,11 @@ https://source.android.com/docs/security/features/selinux/build
 
 之所以需要让precompiled_sepolicy生效作为解决方案，是因为cil条目中不允许存在许可域，否则系统将阻止编译。
 
----
+# 权限用例
 
-**通话录音**
+**21 录音通知**
 
-One UI 7.0针对中国机型增加了原生通话录音功能，但会向通话方强制播放录音通知。
+One UI 7.0针对中国、美国等地机型增加了原生通话录音功能，但会向通话方强制播放录音通知。
 
 您可以在"/data/user_de/0/com.samsung.android.incallui/shared_prefs/com.samsung.android.incallui_preferences.xml"文件中增加以下两个选项，方可激活"测试模式"中的"传统录音方式"，以禁用录音通知功能：
 
@@ -477,22 +493,68 @@ One UI 7.0针对中国机型增加了原生通话录音功能，但会向通话�
     <boolean name="record_call_original" value="true" />
 </map>
 ```
+---
 
-# 说人话
+**22 应急自毁**
 
-- 正向提权 --> 通过非漏洞方式获取root权限
+为应对不可抗力的监管，以下"/data/emerg.sh"脚本将监听"按下侧面按钮5次，并滑动呼叫紧急号码"的事件日志，并立即擦除init1及重置，使手机停留在启动界面，无法正常使用。
 
-- 自主完全控制 --> 用root权限为所欲为
+![Splash preview](https://thumbs2.imgbox.com/04/c4/xTHfH8wL_t.png)
 
-- 版本文件 --> 固件包
+仅擦除init1是无损操作，不会造成数据丢失。您只需使用Odin将init_boot分区恢复，即可如初使用手机。
 
-- REE操作系统 --> 安卓系统
+若您需要更高的安全级别，您可以将脚本变更为擦除metadata分区，这将销毁userdata分区的解密密钥，使访问手机数据变为永久不可能。
 
-- HLOS --> 安卓系统
+```
+#! /system/bin/sh
 
-- 现代安卓手机 --> 系统版本不低于Android 10
+while true; do
+  if [[ $(getprop debug.tracing.screen_state) != "1" ]]; then
+    current_time=$(date +%s)
+    start_time=$((current_time - 8))
+    formatted_time=$(date -d @$start_time +%F\ %T.000)
+    #echo "$formatted_time"
+    if [[ $(logcat -t "$formatted_time" -s EmergencySosUtil) == *"EmergencySosUtil: onClickDialButton()"* ]]; then
+      echo "Emerg event triggered! Responding."
+      touch /mnt/emerg.flag
+      dd if=/dev/zero of=/dev/block/by-name/init_boot bs=1048576
+      echo b > /proc/sysrq-trigger
+      break
+    fi
+  fi
+  sleep 6
+done
+```
 
-- 主要移动工作环境 --> 日常使用的安卓主力机
+为节约电池电量，脚本仅在屏幕亮起时，循环获取8秒间的紧急呼叫相关日志。
+
+---
+
+**23 查找我的女朋友**
+
+当您需要查找女朋友的实时位置，可以使用curl将"dumpsys location | grep location=Location"的坐标缓存信息在其手机上通过自定义HTTP API循环发送。
+
+坐标缓存仅在安卓APP使用位置信息时才会更新。因此，我们需要使用安卓APP在后台不断刷新位置信息。请参阅以下开源项目：
+
+https://github.com/barbeau/gpstest
+
+该APP可在通知栏进行长期工作，实时刷新位置数据。您可以通过shell命令来隐藏和取消隐藏该通知(不会影响APP工作)：
+
+```
+cmd notification snooze --for 99999999 "0|com.android.gpstest|12345678|null|10308"
+
+cmd notification unsnooze "0|com.android.gpstest|12345678|null|10308"
+```
+
+实时刷新位置数据将增加手机耗电。因此，您可以通过脚本控制该服务的启停：
+
+```
+am start-foreground-service -n com.android.gpstest/.ForegroundOnlyLocationService
+
+am stopservice -n com.android.gpstest/.ForegroundOnlyLocationService
+```
+
+您的配偶可通过系统"最近使用"界面(多任务管理键)，自行决定是否提供实时位置更新数据。
 
 # 你说的不对 / 我还有问题
 
