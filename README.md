@@ -556,6 +556,30 @@ am stopservice -n com.android.gpstest/.ForegroundOnlyLocationService
 
 您的配偶可通过系统"最近使用"界面(多任务管理键)，自行决定是否提供实时位置更新数据。
 
+---
+
+**24 玩玩小游戏**
+
+- 单机游戏《死亡独轮车》(Happy Wheels)可通过编辑"/data/data/com.fancyforce.happywheels/shared_prefs/Cocos2dxPrefsFile.xml"进行移除广告和关卡解锁。
+
+```
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <boolean name="remove_ads" value="true" />
+    <string name="c6_l0">600</string>
+</map>
+```
+
+添加"remove_ads"选项可以永久移除游戏中厌人的广告。
+
+添加"cX_lY"选项，值为"Z"，可进行关卡解锁。其中X表示章节号(0-6)，Y表示关卡号(0-14)，Z表示通关用时(推荐使用600秒，不会影响正常的游戏体验)。重复添加此选项即可解锁多个关卡。多次通关时间使用冒号分隔，例如"300.25:600:900.81"。
+
+- 联机游戏《狂野飙车8》和《狂野飙车：传奇集结》(狂野飙车9)，在云端保存用户数据。
+
+使用社交帐户登录《狂野飙车》存在后续需要注销社交账户的可能。
+
+直接备份本地用户数据目录"/data/data/com.gameloft.android.ANMP.GloftA8HM"(或A9)，并在新设备上恢复"databases"、"files"、"shared_prefs"文件夹，即可完成云端账户迁移。
+
 # 你说的不对 / 我还有问题
 
 提个Issue咯。
