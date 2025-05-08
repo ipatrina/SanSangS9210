@@ -558,7 +558,21 @@ am stopservice -n com.android.gpstest/.ForegroundOnlyLocationService
 
 ---
 
-**24 玩玩小游戏**
+**24 短信息拉取**
+
+当您使用"Google 信息"APP作为默认的短信收发应用时，您可以通过以下命令查询消息数据库，将最近的50条短信息输出为CSV格式：
+
+```
+sqlite3 -csv /data/data/com.google.android.apps.messaging/databases/bugle_db "SELECT TABLE2.name, TABLE1.text, TABLE1.timestamp FROM parts AS TABLE1 JOIN conversations AS TABLE2 ON TABLE1.conversation_id = TABLE2._id WHERE TABLE1.text IS NOT NULL ORDER BY TABLE1.timestamp DESC LIMIT 50"
+```
+
+您可以从此处获取一个sqlite3可执行文件：
+
+https://github.com/EXALAB/sqlite3-android
+
+---
+
+**25 玩玩小游戏**
 
 - 单机游戏《死亡独轮车》(Happy Wheels)可通过编辑"/data/data/com.fancyforce.happywheels/shared_prefs/Cocos2dxPrefsFile.xml"进行移除广告和关卡解锁。
 
@@ -579,6 +593,14 @@ am stopservice -n com.android.gpstest/.ForegroundOnlyLocationService
 使用社交帐户登录《狂野飙车》存在后续需要注销社交账户的可能。
 
 直接备份本地用户数据目录"/data/data/com.gameloft.android.ANMP.GloftA8HM"(或A9)，并在新设备上恢复"databases"、"files"、"shared_prefs"文件夹，即可完成云端账户迁移。
+
+---
+
+**26 网络抓包**
+
+您可以从此处获取一个tcpdump可执行文件进行网络数据抓包：
+
+https://github.com/S-trace/tcpdump_static_aarch64
 
 # 你说的不对 / 我还有问题
 
