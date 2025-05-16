@@ -594,7 +594,7 @@ https://github.com/EXALAB/sqlite3-android
 
 直接备份本地用户数据目录"/data/data/com.gameloft.android.ANMP.GloftA8HM"(或A9)，并在新设备上恢复"databases"、"files"、"shared_prefs"文件夹，即可完成云端账户迁移。
 
-- 奥飞特七(Outfit7)“会说话的朋友”系列互动应用，可通过编辑XML和SQLite数据库文件，增加猫币或道具、解锁动画并移除广告。
+- 奥飞特七(Outfit7)“会说话的朋友”系列互动应用，可通过编辑XML和SQLite数据库文件，增加猫币或道具数量、解锁动画并移除广告。
 
 《会说话的汤姆猫》
 ```
@@ -697,7 +697,9 @@ sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean
 ```
 
 《我的汉克狗》
-~~这只太丑了，不搞。~~
+```
+# 这只太丑了，不搞。
+```
 
 请将猫币、钻石数量替换为实际原始数量。
 
