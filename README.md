@@ -594,6 +594,115 @@ https://github.com/EXALAB/sqlite3-android
 
 直接备份本地用户数据目录"/data/data/com.gameloft.android.ANMP.GloftA8HM"(或A9)，并在新设备上恢复"databases"、"files"、"shared_prefs"文件夹，即可完成云端账户迁移。
 
+- 奥飞特七(Outfit7)“会说话的朋友”系列互动应用，可通过编辑XML和SQLite数据库文件，增加猫币或道具、解锁动画并移除广告。
+
+《会说话的汤姆猫》
+```
+sed -i 's|</map>|    <boolean name="unlimited" value="true" \/>\
+</map>|g' /data/data/com.outfit7.talkingtom/shared_prefs/prefs.xml
+```
+
+《会说话的狗狗本》
+```
+/data/sqlite3 /data/data/com.outfit7.talkingben/databases/tube.db "UPDATE state SET value = '{\"number\":2000}';"
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingben/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingben/shared_prefs/FelisBillingCore.xml
+```
+
+《会说话的新闻》
+```
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingnewsfree/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingnewsfree/shared_prefs/FelisBillingCore.xml
+```
+
+《会说话的汤姆猫2》
+```
+/data/sqlite3 /data/data/com.outfit7.talkingtom2free/databases/vca.db "UPDATE state SET value = '{\"balance\":200000}';"
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingtom2free/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingtom2free/shared_prefs/FelisBillingCore.xml
+```
+
+《会说话的鹦鹉》
+```
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingpierrefree/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingpierrefree/shared_prefs/FelisBillingCore.xml
+```
+
+《会说话的安吉拉》
+```
+/data/sqlite3 /data/data/com.outfit7.talkingangelafree/databases/vca.db "UPDATE state SET value = '{\"balance\":200000}';"
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingangelafree/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingangelafree/shared_prefs/FelisBillingCore.xml
+```
+
+《会说话的金杰猫》
+```
+/data/sqlite3 /data/data/com.outfit7.talkinggingerfree/databases/toothpaste.db "UPDATE state SET value = '{\"number\":2000}';"
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkinggingerfree/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkinggingerfree/shared_prefs/FelisBillingCore.xml
+```
+
+《会说话的金杰猫2》
+```
+/data/sqlite3 /data/data/com.outfit7.gingersbirthdayfree/databases/food.db "UPDATE state SET value = '{\"number\":2000}';"
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.gingersbirthdayfree/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.gingersbirthdayfree/shared_prefs/FelisBillingCore.xml
+```
+
+《我的汤姆猫》
+```
+sed -i 's/\&quot;:100000,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingtomfree/shared_prefs/com.outfit7.enterprise.persistence.xml
+sed -i 's/\&quot;:10000,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingtomfree/shared_prefs/com.outfit7.enterprise.persistence.xml
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingtomfree/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingtomfree/shared_prefs/FelisBillingCore.xml
+```
+
+《我的汤姆猫2》
+```
+sed -i 's/\&quot;:100000,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingtom2/shared_prefs/com.outfit7.starlite.mytalkingtom2.xml
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingtom2/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingtom2/shared_prefs/FelisBillingCore.xml
+```
+
+《我的安吉拉》
+```
+sed -i 's/\&quot;100000/\&quot;200000/g' /data/data/com.outfit7.mytalkingangelafree/shared_prefs/com.outfit7.mytalkingangela.game.xml
+sed -i 's/\&quot;10000/\&quot;200000/g' /data/data/com.outfit7.mytalkingangelafree/shared_prefs/com.outfit7.mytalkingangela.game.xml
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingangelafree/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingangelafree/shared_prefs/FelisBillingCore.xml
+```
+
+《我的安吉拉2》
+```
+sed -i 's/\&quot;:100000,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingangela2/shared_prefs/com.outfit7.starlite.mytalkingangela2.user.xml
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingangela2/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingangela2/shared_prefs/FelisBillingCore.xml
+```
+
+《汤姆猫总动员》
+```
+sed -i 's/\&quot;:300,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingtomfriends/shared_prefs/com.outfit7.starlite.mytalkingtomfriends.user.xml
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingtomfriends/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingtomfriends/shared_prefs/FelisBillingCore.xml
+```
+
+《我的汉克狗》
+~~这只太丑了，不搞。~~
+
+请将猫币、钻石数量替换为实际原始数量。
+
+sqlite3可执行文件可通过章节24获取。
+
 ---
 
 **26 网络抓包**
