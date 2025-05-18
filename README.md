@@ -594,7 +594,7 @@ https://github.com/EXALAB/sqlite3-android
 
 直接备份本地用户数据目录"/data/data/com.gameloft.android.ANMP.GloftA8HM"(或A9)，并在新设备上恢复"databases"、"files"、"shared_prefs"文件夹，即可完成云端账户迁移。
 
-- 奥飞特七(Outfit7)“会说话的朋友”系列互动应用，可通过编辑XML和SQLite数据库文件，增加猫币或道具数量、解锁动画并移除广告。
+- 奥飞特七(Outfit7)"会说话的朋友"系列互动应用，可通过编辑XML和SQLite数据库文件，增加猫币或道具数量、解锁动画并移除广告。
 
 《会说话的汤姆猫》
 ```
@@ -608,12 +608,16 @@ sed -i 's|</map>|    <boolean name="unlimited" value="true" \/>\
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingben/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingben/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.talkingben/shared_prefs/FelisBillingCore.xml
 ```
 
 《会说话的新闻》
 ```
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingnewsfree/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingnewsfree/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.talkingnewsfree/shared_prefs/FelisBillingCore.xml
 ```
 
 《会说话的汤姆猫2》
@@ -622,12 +626,16 @@ sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingtom2free/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingtom2free/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.talkingtom2free/shared_prefs/FelisBillingCore.xml
 ```
 
 《会说话的鹦鹉》
 ```
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingpierrefree/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingpierrefree/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.talkingpierrefree/shared_prefs/FelisBillingCore.xml
 ```
 
 《会说话的安吉拉》
@@ -636,6 +644,8 @@ sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingangelafree/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingangelafree/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.talkingangelafree/shared_prefs/FelisBillingCore.xml
 ```
 
 《会说话的金杰猫》
@@ -644,6 +654,8 @@ sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkinggingerfree/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkinggingerfree/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.talkinggingerfree/shared_prefs/FelisBillingCore.xml
 ```
 
 《会说话的金杰猫2》
@@ -652,6 +664,8 @@ sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.gingersbirthdayfree/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.gingersbirthdayfree/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.gingersbirthdayfree/shared_prefs/FelisBillingCore.xml
 ```
 
 《我的汤姆猫》
@@ -661,6 +675,8 @@ sed -i 's/\&quot;:10000,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingtomf
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingtomfree/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingtomfree/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.mytalkingtomfree/shared_prefs/FelisBillingCore.xml
 ```
 
 《我的汤姆猫2》
@@ -669,6 +685,8 @@ sed -i 's/\&quot;:100000,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingtom
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingtom2/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingtom2/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.mytalkingtom2/shared_prefs/FelisBillingCore.xml
 ```
 
 《我的安吉拉》
@@ -678,6 +696,8 @@ sed -i 's/\&quot;10000/\&quot;200000/g' /data/data/com.outfit7.mytalkingangelafr
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingangelafree/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingangelafree/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.mytalkingangelafree/shared_prefs/FelisBillingCore.xml
 ```
 
 《我的安吉拉2》
@@ -686,6 +706,8 @@ sed -i 's/\&quot;:100000,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingang
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingangela2/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingangela2/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.mytalkingangela2/shared_prefs/FelisBillingCore.xml
 ```
 
 《汤姆猫总动员》
@@ -694,6 +716,8 @@ sed -i 's/\&quot;:300,/\&quot;:200000,/g' /data/data/com.outfit7.mytalkingtomfri
 
 sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.mytalkingtomfriends/shared_prefs/FelisBillingCore.xml
 sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.mytalkingtomfriends/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.mytalkingtomfriends/shared_prefs/FelisBillingCore.xml
 ```
 
 《我的汉克狗》
@@ -704,6 +728,8 @@ sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean
 请将猫币、钻石数量替换为实际原始数量。
 
 sqlite3可执行文件可通过章节24获取。
+
+应用会每日重置FelisBillingCore.xml，因此需要通过chattr命令锁定文件。
 
 ---
 
