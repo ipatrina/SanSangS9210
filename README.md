@@ -228,7 +228,7 @@ tar -cf super-patched.tar super.img.lz4
 rm super.img.lz4
 ```
 
-对于simg2img、mkfs.erofs、secilc和lz4程序，请使用APT软件包管理器获取。
+对于simg2img、mkfs.erofs、secilc和lz4程序，请使用APT软件包管理器获取。请同时安装gawk软件包，才可以使lpmake中的awk命令输出正确结果。
 
 对于imjtool程序，请从官方网站获取：
 
@@ -474,9 +474,13 @@ https://fota-cloud-dn.ospserver.net/firmware/TGY/SM-S9210/version.xml
 
 https://source.android.com/docs/security/features/selinux/build
 
-我们发现，三星Galaxy S24设备的Android 15固件中的三组SHA256哈希竟不匹配，这就导致无论我们是否修改precompiled_sepolicy文件，其都不会在系统启动时被加载，而是会使用secilc即时编译SELinux政策文件。
+我们发现，三星Galaxy S24设备的Android 15固件中的三组SHA256哈希竟不匹配，这就导致无论我们是否修改precompiled_sepolicy文件，其都不会在系统启动时被加载，而是会使用secilc命令即时编译SELinux政策文件。
 
-为了解决这一问题，我们可以暂时破坏avc_denied()，在安卓15环境下获得root命令行执行权限后，提取即时编译并加载的SELinux政策文件"/sys/fs/selinux/policy"。然后，在重新打包SUPER分区时，与三个SHA256哈希文件一同覆盖到"/odm/etc/selinux/*"。
+为了解决这一问题，我们可以暂时破坏avc_denied()，在安卓15环境下获得root命令行执行权限后，提取即时编译并加载的SELinux政策文件"/sys/fs/selinux/policy"。
+
+但更加便捷的做法是，参考安卓源代码(https://android.googlesource.com/platform/system/core/+/master/init/selinux.cpp)中的secilc编译命令用法，直接在Debian操作系统中使用secilc命令编译SELinux政策文件。"vend_plat_vers"版本号可通过"/vendor/etc/selinux/plat_sepolicy_vers.txt"文件获取。
+
+最后，在重新打包SUPER分区时，与三个SHA256哈希文件一同覆盖到"/odm/etc/selinux/*"。
 
 之所以需要让precompiled_sepolicy生效作为解决方案，是因为cil条目中不允许存在许可域，否则系统将阻止编译。
 
