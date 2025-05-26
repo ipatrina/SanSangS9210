@@ -193,15 +193,17 @@ cp -a /mnt/odm /
 
 # Below commands only needed when chapter Android 15 applies to your case #
 
-mkdir /mnt/system; mkdir /mnt/system_ext; mkdir /mnt/product; mount -t erofs -o loop system.img /mnt/system; mount -t erofs -o loop system_ext.img /mnt/system_ext; mount -t erofs -o loop product.img /mnt/product
+mkdir /mnt/system; mkdir /mnt/system_ext; mkdir /mnt/product; mkdir /mnt/vendor; mount -t erofs -o loop system.img /mnt/system; mount -t erofs -o loop system_ext.img /mnt/system_ext; mount -t erofs -o loop product.img /mnt/product; mount -t erofs -o loop vendor.img /mnt/vendor
 
 cp /mnt/system/system/etc/selinux/plat_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.plat_sepolicy_and_mapping.sha256
 cp /mnt/system_ext/etc/selinux/system_ext_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.system_ext_sepolicy_and_mapping.sha256
 cp /mnt/product/etc/selinux/product_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.product_sepolicy_and_mapping.sha256
 
-umount /mnt/product; umount /mnt/system_ext; umount /mnt/system; rm -r /mnt/product; rm -r /mnt/system_ext; rm -r /mnt/system
+secilc /mnt/system/system/etc/selinux/plat_sepolicy.cil -m -M true -G -N -c 30 /mnt/system/system/etc/selinux/mapping/34.0.cil -o sepolicy.XXXXXX -f /dev/null /mnt/system/system/etc/selinux/mapping/34.0.compat.cil /mnt/system_ext/etc/selinux/system_ext_sepolicy.cil /mnt/system_ext/etc/selinux/mapping/34.0.cil /mnt/system_ext/etc/selinux/mapping/34.0.compat.cil /mnt/product/etc/selinux/product_sepolicy.cil /mnt/product/etc/selinux/mapping/34.0.cil /mnt/vendor/etc/selinux/plat_pub_versioned.cil /mnt/vendor/etc/selinux/vendor_sepolicy.cil
 
-cp policy /odm/etc/selinux/precompiled_sepolicy
+umount /mnt/vendor; umount /mnt/product; umount /mnt/system_ext; umount /mnt/system; rm -r /mnt/vendor; rm -r /mnt/product; rm -r /mnt/system_ext; rm -r /mnt/system
+
+cp sepolicy.XXXXXX /odm/etc/selinux/precompiled_sepolicy
 
 ################
 
@@ -226,7 +228,7 @@ tar -cf super-patched.tar super.img.lz4
 rm super.img.lz4
 ```
 
-对于simg2img、mkfs.erofs和lz4程序，请使用APT软件包管理器获取。
+对于simg2img、mkfs.erofs、secilc和lz4程序，请使用APT软件包管理器获取。
 
 对于imjtool程序，请从官方网站获取：
 
