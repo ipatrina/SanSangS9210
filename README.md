@@ -478,7 +478,9 @@ https://source.android.com/docs/security/features/selinux/build
 
 为了解决这一问题，我们可以暂时破坏avc_denied()，在安卓15环境下获得root命令行执行权限后，提取即时编译并加载的SELinux政策文件"/sys/fs/selinux/policy"。
 
-但更加便捷的做法是，参考安卓源代码(https://android.googlesource.com/platform/system/core/+/master/init/selinux.cpp)中的secilc编译命令用法，直接在Debian操作系统中使用secilc命令编译SELinux政策文件。"vend_plat_vers"版本号可通过"/vendor/etc/selinux/plat_sepolicy_vers.txt"文件获取。
+但更加便捷的做法是，参考安卓源代码中secilc的命令用法，直接在Debian操作系统中使用secilc命令编译SELinux政策文件。"vend_plat_vers"版本号可通过"/vendor/etc/selinux/plat_sepolicy_vers.txt"文件获取。
+
+https://android.googlesource.com/platform/system/core/+/master/init/selinux.cpp
 
 最后，在重新打包SUPER分区时，与三个SHA256哈希文件一同覆盖到"/odm/etc/selinux/*"。
 
