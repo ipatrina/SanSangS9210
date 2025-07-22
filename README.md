@@ -576,7 +576,7 @@ sqlite3 -csv /data/data/com.google.android.apps.messaging/databases/bugle_db "SE
 
 您可以从此处获取一个sqlite3可执行文件：
 
-https://github.com/EXALAB/sqlite3-android
+https://xdaforums.com/t/new-sqlite3-cli-binary-v3-50-1-for-all-devices.4273049
 
 ---
 
@@ -746,6 +746,18 @@ sqlite3可执行文件可通过章节24获取。
 您可以从此处获取一个tcpdump可执行文件进行网络数据抓包：
 
 https://github.com/S-trace/tcpdump_static_aarch64
+
+---
+
+**27 随机MAC地址**
+
+WLAN随机分配的MAC地址存储于以下文件：
+
+```
+/data/misc/apexdata/com.android.wifi/WifiConfigStore.xml
+
+/data/misc/apexdata/com.android.wifi/WifiConfigStoreSoftAp.xml
+```
 
 # 你说的不对 / 我还有问题
 
