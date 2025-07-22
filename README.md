@@ -749,14 +749,38 @@ https://github.com/S-trace/tcpdump_static_aarch64
 
 ---
 
-**27 随机MAC地址**
+**27 WLAN MAC地址**
 
-WLAN随机分配的MAC地址存储于以下文件：
+- 设备MAC地址
+
+WLAN配置存储于以下文件：
 
 ```
 /data/misc/apexdata/com.android.wifi/WifiConfigStore.xml
 
 /data/misc/apexdata/com.android.wifi/WifiConfigStoreSoftAp.xml
+```
+
+修改"WifiConfigStore.xml"文件中的以下选项可在安卓系统层面自定义设备MAC地址：
+
+```
+<string name="wifi_sta_factory_mac_address">aa:bb:cc:dd:ee:ff</string>
+```
+
+修改后，必须使用以下命令生效：
+
+```
+pkill system_server
+```
+
+生效后，建议您重启设备。
+
+- 随机MAC地址
+
+若要在每次忘记网络后重新生成随机MAC地址，请使用以下命令配置WLAN非持久随机分配MAC地址功能：
+
+```
+settings put global non_persistent_mac_randomization_force_enabled 1
 ```
 
 # 你说的不对 / 我还有问题
