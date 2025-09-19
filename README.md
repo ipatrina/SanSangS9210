@@ -486,6 +486,12 @@ https://android.googlesource.com/platform/system/core/+/master/init/selinux.cpp
 
 之所以需要让precompiled_sepolicy生效作为解决方案，是因为cil条目中不允许存在许可域，否则系统将阻止编译。
 
+# 安卓16
+
+因不明原因，自One UI 8.0起，三星不再允许OEM解锁。
+
+请保持您的设备使用One UI 6 / 7。
+
 # 权限用例
 
 **21 录音通知**
@@ -505,37 +511,35 @@ One UI 7.0针对中国、美国等地机型增加了原生通话录音功能，�
 
 **22 应急自毁**
 
-为应对不可抗力的监管，以下"/data/emerg.sh"脚本将监听"按下侧面按钮5次，并滑动呼叫紧急号码"的事件日志，并立即擦除init1及重置，使手机停留在启动界面，无法正常使用。
+为应对不可抗力的监管，以下"/data/emerg.sh"脚本将监听"按下侧面按钮5次"事件，并立即擦除init1及重置，使手机停留在启动界面，无法正常使用。
 
 ![Splash preview](https://thumbs2.imgbox.com/04/c4/xTHfH8wL_t.png)
 
 仅擦除init1是无损操作，不会造成数据丢失。您只需使用Odin将init_boot分区恢复，即可如初使用手机。
 
-若您需要更高的安全级别，您可以将脚本变更为擦除metadata分区，这将销毁userdata分区的解密密钥，使访问手机数据变为永久不可能。
+若您需要更高的安全级别，您可以使能Recovery相关功能，彻底销毁手机数据。
 
 ```
 #! /system/bin/sh
 
 while true; do
   if [[ $(getprop debug.tracing.screen_state) != "1" ]]; then
-    current_time=$(date +%s)
-    start_time=$((current_time - 8))
-    formatted_time=$(date -d @$start_time +%F\ %T.000)
-    #echo "$formatted_time"
-    if [[ $(logcat -t "$formatted_time" -s EmergencySosUtil) == *"EmergencySosUtil: onClickDialButton()"* ]]; then
+    if [[ $(settings get secure emergency_state_machine_state) == "1" ]]; then
+      settings put secure emergency_state_machine_state 0
       echo "Emerg event triggered! Responding."
       touch /mnt/emerg.flag
       dd if=/dev/zero of=/dev/block/by-name/init_boot bs=1048576
-      echo b > /proc/sysrq-trigger
+      mkdir /cache/recovery
+      #echo "--wipe_data" > /cache/recovery/command
+      sync
+      settings put secure emergency_state_machine_state 0
+      reboot# recovery
       break
     fi
   fi
-  sleep 6
+  sleep 1
 done
 ```
-
-为节约电池电量，脚本仅在屏幕亮起时，循环获取8秒间的紧急呼叫相关日志。
-
 ---
 
 **23 查找我的女朋友**
@@ -571,7 +575,7 @@ am stopservice -n com.android.gpstest/.ForegroundOnlyLocationService
 当您使用"Google 信息"APP作为默认的短信收发应用时，您可以通过以下命令查询消息数据库，将最近的50条短信息输出为CSV格式：
 
 ```
-sqlite3 -csv /data/data/com.google.android.apps.messaging/databases/bugle_db "SELECT TABLE2.name, TABLE1.text, TABLE1.timestamp FROM parts AS TABLE1 JOIN conversations AS TABLE2 ON TABLE1.conversation_id = TABLE2._id ORDER BY TABLE1.timestamp DESC LIMIT 50"
+/data/sqlite3 -csv /data/data/com.google.android.apps.messaging/databases/bugle_db "SELECT TABLE2.name, TABLE1.text, TABLE1.timestamp FROM parts AS TABLE1 JOIN conversations AS TABLE2 ON TABLE1.conversation_id = TABLE2._id ORDER BY TABLE1.timestamp DESC LIMIT 50"
 ```
 
 您可以从此处获取一个sqlite3可执行文件：
@@ -604,7 +608,18 @@ https://xdaforums.com/t/new-sqlite3-cli-binary-v3-50-1-for-all-devices.4273049
 
 - 奥飞特七(Outfit7)"会说话的朋友"系列互动应用，可通过编辑XML和SQLite数据库文件，增加猫币或道具数量、解锁动画并移除广告。
 
-《会说话的汤姆猫》
+《会说话的汤姆猫》(2.0)
+```
+sed -i 's/\&quot;:5/\&quot;:2000/g' /data/data/com.outfit7.talkingtom/shared_prefs/com.outfit7.enterprise.persistence.xml
+sed -i 's/\&quot;:3/\&quot;:2000/g' /data/data/com.outfit7.talkingtom/shared_prefs/com.outfit7.enterprise.persistence.xml
+
+sed -i 's/<boolean name="PaidUser.isPaidUser" value="false" \/>/<boolean name="PaidUser.isPaidUser" value="true" \/>/' /data/data/com.outfit7.talkingtom/shared_prefs/FelisBillingCore.xml
+sed -i 's/<boolean name="PaidUser.ignoreConfigUpdate" value="false" \/>/<boolean name="PaidUser.ignoreConfigUpdate" value="true" \/>/' /data/data/com.outfit7.talkingtom/shared_prefs/FelisBillingCore.xml
+
+chattr +i /data/data/com.outfit7.talkingtom/shared_prefs/FelisBillingCore.xml
+```
+
+《会说话的汤姆猫》(1.0)
 ```
 sed -i 's|</map>|    <boolean name="unlimited" value="true" \/>\
 </map>|g' /data/data/com.outfit7.talkingtom/shared_prefs/prefs.xml
