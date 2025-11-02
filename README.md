@@ -802,6 +802,41 @@ pkill system_server
 settings put global non_persistent_mac_randomization_force_enabled 1
 ```
 
+---
+
+**28 触摸屏去使能**
+
+为制造手机故障的假象，您可以安全、暂时地使触控屏幕完全失灵。
+
+```
+echo -n "spi1.0" > /sys/bus/spi/drivers/stm_ts_spi/unbind
+```
+
+该命令可将SPI总线上的设备"spi1.0"从"stm_ts_spi"驱动中解绑，从而停止内核驱动对触控设备的控制，属于无损级别操作。
+
+重新启动手机可使设备功能完全恢复。
+
+若您希望了解如何查找正确的触控设备与驱动名称，请遵循以下步骤：
+
+1. 使用"getevent -l"命令定位触摸屏幕设备编号。
+
+```
+add device 7: /dev/input/event7
+  name:     "sec_touchscreen"
+```
+
+2. 使用"readlink /sys/class/input/input7/device"命令获取设备名称。
+
+```
+../../../spi1.0
+```
+
+3. 使用"readlink /sys/class/input/input7/device/driver"命令获取驱动名称。
+
+```
+../../../../../../../../bus/spi/drivers/stm_ts_spi
+```
+
 # 你说的不对 / 我还有问题
 
 提个Issue咯。
