@@ -923,6 +923,8 @@ settings delete secure disable_secure_windows
 
 已测试Chrome浏览器无痕模式、支付宝付款码屏幕截图和录制有效。
 
+(这里是研究人员提供的一些非正式研究记录：https://pastebin.com/raw/n3UsieBE)
+
 ---
 
 **31 屏幕亮度**
