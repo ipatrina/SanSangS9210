@@ -103,11 +103,7 @@ imjtool super-raw.img extract
 
 cd extracted
 
-mkdir /mnt/system
-
-mount -t erofs -o loop system.img /mnt/system
-
-cp -a /mnt/system /
+mkdir /mnt/system; mount -t erofs -o loop system.img /mnt/system; cp -a /mnt/system /
 
 cat > /system/system/etc/init/local.rc <<EOF
 on property:dev.bootcomplete=1
@@ -142,68 +138,52 @@ EOF
 
 chcon --reference /system/system/etc/init/hw/init.rc /system/system/etc/rc.local
 
-rm -r /system/system/app/SmartSwitchAgent
-rm -r /system/system/app/SmartSwitchStub
-rm -r /system/system/app/SamsungPassAutofill_v1
-rm -r /system/system/app/FBAppManager_NS
-rm -r /system/system/priv-app/GalaxyApps_OPEN
-rm -r /system/system/priv-app/SamsungMessages
-rm -r /system/system/priv-app/SmartSwitchAssistant
-rm -r /system/system/priv-app/SamsungPass
-rm -r /system/system/priv-app/OneDrive_Samsung_v3
-rm -r /system/system/priv-app/YourPhone_P1_5
-rm -r /system/system/priv-app/LinkToWindowsService
-rm -r /system/system/priv-app/FBInstaller_NS
-rm -r /system/system/priv-app/FBServices
+rm -rf /system/system/app/SmartSwitchAgent
+rm -rf /system/system/app/SmartSwitchStub
+rm -rf /system/system/app/SamsungPassAutofill_v1
+rm -rf /system/system/app/FBAppManager_NS
+rm -rf /system/system/priv-app/GalaxyApps_OPEN
+rm -rf /system/system/priv-app/SamsungMessages
+rm -rf /system/system/priv-app/SmartSwitchAssistant
+rm -rf /system/system/priv-app/SamsungPass
+rm -rf /system/system/priv-app/OneDrive_Samsung_v3
+rm -rf /system/system/priv-app/YourPhone_P1_5
+rm -rf /system/system/priv-app/LinkToWindowsService
+rm -rf /system/system/priv-app/FBInstaller_NS
+rm -rf /system/system/priv-app/FBServices
 
 mkfs.erofs -zlz4hc system-patched.img /system
 
-umount /mnt/system
+umount /mnt/system; rm -rf /mnt/system; rm -rf /system
 
-rm -r /mnt/system
+mkdir /mnt/product; mount -t erofs -o loop product.img /mnt/product; cp -a /mnt/product /
 
-rm -r /system
-
-mkdir /mnt/product
-
-mount -t erofs -o loop product.img /mnt/product
-
-cp -a /mnt/product /
-
-rm -r /product/app/DuoStub
-rm -r /product/app/Gmail2
-rm -r /product/app/YouTube
-rm -r /product/app/Maps
-rm -r /product/app/AssistantShell
-rm -r /product/priv-app/Velvet
+rm -rf /product/app/DuoStub
+rm -rf /product/app/Gmail2
+rm -rf /product/app/YouTube
+rm -rf /product/app/Maps
+rm -rf /product/app/AssistantShell
+rm -rf /product/priv-app/Velvet
 
 mkfs.erofs -zlz4hc product-patched.img /product
 
-umount /mnt/product
+umount /mnt/product; rm -rf /mnt/product; rm -rf /product
 
-rm -r /mnt/product
-
-rm -r /product
-
-mkdir /mnt/odm
-
-mount -t erofs -o loop odm.img /mnt/odm
-
-cp -a /mnt/odm /
+mkdir /mnt/odm; mount -t erofs -o loop odm.img /mnt/odm; cp -a /mnt/odm /
 
 # Below commands only needed when chapter Android 15 applies to your case #
 
 mkdir /mnt/system; mkdir /mnt/system_ext; mkdir /mnt/product; mkdir /mnt/vendor; mount -t erofs -o loop system.img /mnt/system; mount -t erofs -o loop system_ext.img /mnt/system_ext; mount -t erofs -o loop product.img /mnt/product; mount -t erofs -o loop vendor.img /mnt/vendor
 
-cp /mnt/system/system/etc/selinux/plat_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.plat_sepolicy_and_mapping.sha256
-cp /mnt/system_ext/etc/selinux/system_ext_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.system_ext_sepolicy_and_mapping.sha256
-cp /mnt/product/etc/selinux/product_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.product_sepolicy_and_mapping.sha256
+cp -f /mnt/system/system/etc/selinux/plat_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.plat_sepolicy_and_mapping.sha256
+cp -f /mnt/system_ext/etc/selinux/system_ext_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.system_ext_sepolicy_and_mapping.sha256
+cp -f /mnt/product/etc/selinux/product_sepolicy_and_mapping.sha256 /odm/etc/selinux/precompiled_sepolicy.product_sepolicy_and_mapping.sha256
 
 secilc /mnt/system/system/etc/selinux/plat_sepolicy.cil -m -M true -G -N -c 30 /mnt/system/system/etc/selinux/mapping/34.0.cil -o sepolicy.XXXXXX -f /dev/null /mnt/system/system/etc/selinux/mapping/34.0.compat.cil /mnt/system_ext/etc/selinux/system_ext_sepolicy.cil /mnt/system_ext/etc/selinux/mapping/34.0.cil /mnt/system_ext/etc/selinux/mapping/34.0.compat.cil /mnt/product/etc/selinux/product_sepolicy.cil /mnt/product/etc/selinux/mapping/34.0.cil /mnt/vendor/etc/selinux/plat_pub_versioned.cil /mnt/vendor/etc/selinux/vendor_sepolicy.cil
 
-umount /mnt/vendor; umount /mnt/product; umount /mnt/system_ext; umount /mnt/system; rm -r /mnt/vendor; rm -r /mnt/product; rm -r /mnt/system_ext; rm -r /mnt/system
+umount /mnt/vendor; umount /mnt/product; umount /mnt/system_ext; umount /mnt/system; rm -rf /mnt/vendor; rm -rf /mnt/product; rm -rf /mnt/system_ext; rm -rf /mnt/system
 
-cp sepolicy.XXXXXX /odm/etc/selinux/precompiled_sepolicy
+cp -f sepolicy.XXXXXX /odm/etc/selinux/precompiled_sepolicy
 
 ################
 
@@ -211,21 +191,17 @@ sepolicy-inject -Z shell -P /odm/etc/selinux/precompiled_sepolicy
 
 mkfs.erofs -zlz4hc odm-patched.img /odm
 
-umount /mnt/odm
+umount /mnt/odm; rm -rf /mnt/odm; rm -rf /odm
 
-rm -r /mnt/odm
-
-rm -r /odm
-
-lpmake --metadata-size 65536 --device-size $(du -b ../super-raw.img | awk '{print $1}') --metadata-slots 2 --group qti_dynamic_partitions:$(du -b system-patched.img odm-patched.img product-patched.img system_dlkm.img system_ext.img vendor.img vendor_dlkm.img | awk '{s+=$1} END {print s}') --partition system:none:$(du -b system-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition odm:none:$(du -b odm-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition product:none:$(du -b product-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition system_dlkm:none:$(du -b system_dlkm.img | awk '{print $1}'):qti_dynamic_partitions --partition system_ext:none:$(du -b system_ext.img | awk '{print $1}'):qti_dynamic_partitions --partition vendor:none:$(du -b vendor.img | awk '{print $1}'):qti_dynamic_partitions --partition vendor_dlkm:none:$(du -b vendor_dlkm.img | awk '{print $1}'):qti_dynamic_partitions --image system=system-patched.img --image odm=odm-patched.img --image product=product-patched.img --image system_dlkm=system_dlkm.img --image system_ext=system_ext.img --image vendor=vendor.img --image vendor_dlkm=vendor_dlkm.img --sparse --output super-patched.img
+lpmake --metadata-size 65536 --device-size $(du -b ../super-raw.img | awk '{print $1}') --metadata-slots 2 --group qti_dynamic_partitions:$(du -b ../super-raw.img | awk '{print $1 - 4194304}') --partition system:none:$(du -b system-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition odm:none:$(du -b odm-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition product:none:$(du -b product-patched.img | awk '{print $1}'):qti_dynamic_partitions --partition system_dlkm:none:$(du -b system_dlkm.img | awk '{print $1}'):qti_dynamic_partitions --partition system_ext:none:$(du -b system_ext.img | awk '{print $1}'):qti_dynamic_partitions --partition vendor:none:$(du -b vendor.img | awk '{print $1}'):qti_dynamic_partitions --partition vendor_dlkm:none:$(du -b vendor_dlkm.img | awk '{print $1}'):qti_dynamic_partitions --image system=system-patched.img --image odm=odm-patched.img --image product=product-patched.img --image system_dlkm=system_dlkm.img --image system_ext=system_ext.img --image vendor=vendor.img --image vendor_dlkm=vendor_dlkm.img --sparse --output super-patched.img
 
 lz4 -B6 --content-size super-patched.img super.img.lz4
 
-rm super-patched.img
+rm -f super-patched.img
 
 tar -cf super-patched.tar super.img.lz4
 
-rm super.img.lz4
+rm -f super.img.lz4
 ```
 
 对于simg2img、mkfs.erofs、secilc和lz4程序，请使用APT软件包管理器获取。请同时安装gawk软件包，才可以使lpmake中的awk命令输出正确结果。
@@ -434,7 +410,7 @@ https://fota-cloud-dn.ospserver.net/firmware/TGY/SM-S9210/version.xml
 
 - S 代表更新类型，即安全补丁更新。（此项若为U，则代表功能性更新。）
 
-- 4 代表Bootloader版本号。（将进行防降级保险丝熔断。）
+- 4 代表Bootloader (ARB BIT)版本号。（将进行防降级保险丝熔断。）
 
 - A 代表安卓版本，即Android 14。（此项若为B，则代表Android 15。）
 
@@ -496,11 +472,61 @@ https://android.googlesource.com/platform/system/core/+/master/init/selinux.cpp
 
 请保持您的设备使用One UI 6 / 7。
 
+**升级**
+
+如您有意使用One UI 8，在未解锁的设备上，请先降级至One UI 7。
+
+在已解锁并正常使用的设备上，请严格按照以下步骤操作，您的数据不会丢失：
+
+1. 必须确定您的OUI7固件包的防降级熔断版本号(ARB BIT)与您的OUI8固件包的防降级熔断版本号(ARB BIT)完全一致。若不一致，您不能刷写OUI8，请立即终止操作。
+
+例如：您可以使用"S9210ZHS**4**BYDF"与"S9210ZHS**4**CYJ7"版本文件工作，因为它们的ARB BIT都是"4"。
+
+2. 提取OUI7 BL包中的abl.elf.lz4。此步骤后，您不再需要使用OUI7固件包。
+
+3. 解压OUI8 BL包。
+
+4. 在OUI8 BL解压目录中，使用lz4解压vbmeta.img.lz4。
+  
+5. 在OUI8 BL解压目录中，按照章节04的描述修改上一步骤解压的vbmeta.img。
+
+6. 在OUI8 BL解压目录中，删除vbmeta.img.lz4。
+
+7. 在OUI8 BL解压目录中，删除abl.elf.lz4。
+
+8. 将第二步提取的OUI7 BL包中的abl.elf.lz4，放置于OUI8 BL解压目录。
+
+此时，您的OUI8 BL解压目录中，包含了两个被替换的文件：abl.elf.lz4 (来自OUI7) 和 vbmeta.img (不需要重新压缩为lz4)。
+
+9. 使用tar命令将OUI8 BL解压目录重新打包为tar文件。
+
+```
+tar -cf BL-patched.tar *
+```
+
+10. 使用Odin选择以下文件组合，刷入设备。(对于AP、CP、CSC，请选择您的实际版本文件。CSC文件必须以"HOME_CSC_"开头，否则会丢失用户数据。)
+
+[BL] BL-patched.tar
+
+[AP] AP_S9210ZHS4CYJ7_S9210ZHS4CYJ7_MQB102654672_REV00_user_low_ship_MULTI_CERT_meta_OS16.tar.md5
+
+[CP] CP_S9210ZCS4BYDF_CP30183922_MQB96147879_REV00_user_low_ship_MULTI_CERT.tar.md5
+
+[CSC] HOME_CSC_OZS_S9210OZS4BYDF_MQB96147879_REV00_user_low_ship_MULTI_CERT.tar.md5
+
+刷写完成后，您可以正常启动进入One UI 8系统。
+
+11. 根据章节05的描述，修改OUI8 AP包中SUPER分区。然后重新进入Odin下载模式，刷写修改后SUPER分区。
+
+[AP] super-patched.tar
+
 # 权限用例
 
 **21 录音通知**
 
 One UI 7.0针对中国、美国等地机型增加了原生通话录音功能，但会向通话方强制播放录音通知。
+
+- One UI 7 (Android 15)
 
 您可以在"/data/user_de/0/com.samsung.android.incallui/shared_prefs/com.samsung.android.incallui_preferences.xml"文件中增加以下两个选项，方可激活"测试模式"中的"传统录音方式"，以禁用录音通知功能：
 
@@ -511,6 +537,27 @@ One UI 7.0针对中国、美国等地机型增加了原生通话录音功能，�
     <boolean name="record_call_original" value="true" />
 </map>
 ```
+
+- One UI 8 (Android 16)
+
+新版"电话"应用程序通过全局设置项决定是否使用带有录音通知的交互界面。
+
+"电话"应用程序在每次初始化时，均会重新读取CSC设置，并将"settings global call_recording_ui_type"重新设置为"1"(中国机型CSC配置)。
+
+而每次拨号后，仅当程序获取"call_recording_ui_type"的值为"0"时，才会选择进入"传统录音方式"界面。
+
+故，若要禁用录音通知功能，您必须循环检测该值是否被设置为"1"，并立即更改为"0"。(每当重新启动"电话"APP时会被一次性重置为"1"，而如果您能立即将其置"0"，则在拨号后APP就会实时使用"0"值来展示界面。)
+
+相关自动化脚本的实现已合并至下一章节。
+
+除此之外，在"call_recording_ui_type"的值为"0"时，可以实现通话自动录制。
+
+```
+settings put system record_calls_automatically_on_off 1
+```
+
+"call_recording_ui_type"为"1"时，该值("record_calls_automatically_on_off")无影响。"record_calls_automatically_on_off"默认值为"0"，该值不会被自动覆盖。
+
 ---
 
 **22 应急自毁**
@@ -521,7 +568,7 @@ One UI 7.0针对中国、美国等地机型增加了原生通话录音功能，�
 
 仅擦除init1是无损操作，不会造成数据丢失。您只需使用Odin将init_boot分区恢复，即可如初使用手机。
 
-若您需要更高的安全级别，您可以使能Recovery相关功能，彻底销毁手机数据。
+若您需要更高的安全级别，您可以使能"--wipe_data"，彻底销毁手机数据。
 
 ```
 #! /system/bin/sh
@@ -532,13 +579,17 @@ while true; do
       settings put secure emergency_state_machine_state 0
       echo "Emerg event triggered! Responding."
       touch /mnt/emerg.flag
-      dd if=/dev/zero of=/dev/block/by-name/init_boot bs=1048576
+      #dd if=/dev/zero of=/dev/block/by-name/init_boot bs=1048576
       mkdir /cache/recovery
+      echo "--wipe_cache" > /cache/recovery/command
       #echo "--wipe_data" > /cache/recovery/command
       sync
       settings put secure emergency_state_machine_state 0
-      reboot# recovery
+      reboot recovery
       break
+    fi
+    if [[ $(settings get global call_recording_ui_type) == "1" ]]; then
+      settings put global call_recording_ui_type 0
     fi
   fi
   sleep 1
@@ -836,6 +887,41 @@ add device 7: /dev/input/event7
 ```
 ../../../../../../../../bus/spi/drivers/stm_ts_spi
 ```
+
+---
+
+**29 消耗移动数据使用量**
+
+在手机正常连接并使用Wi-Fi网络的情况下，您依然可以通过命令行消耗4G/5G移动数据流量。这适用于移动网络套餐流量过多、无法用尽的情况。示例命令如下：
+
+```
+curl --interface rmnet_data7 -o /dev/null https://wa-us-ping.vultr.com/vultr.com.1000MB.bin
+```
+
+您需要在开发者选项中使能"始终开启移动数据网络"选项，否则系统不会创建相应的rmnet_data网络接口。
+
+---
+
+**30 去使能敏感信息窗口保护**
+
+一些安卓应用通过设置"FLAG_SECURE"窗口标志，来禁止屏幕截图和录制。
+
+https://developer.android.com/security/fraud-prevention/activities
+
+通过使能开发调试开关，可以避免该窗口标志生效。
+
+```
+/data/system_properties ro.debuggable 1
+settings put secure disable_secure_windows 1
+/data/system_properties ro.debuggable 0
+settings delete secure disable_secure_windows
+```
+
+仅当"ro.debuggable"为"1"时，"disable_secure_windows"才会生效。而消费者操作系统的"ro.debuggable"值一定为"0"。因此，执行上述命令依赖章节09的过程。
+
+执行上述命令后，系统将在内存中标记去使能敏感信息窗口保护，本次开机期间有效。
+
+已测试Chrome浏览器无痕模式、支付宝付款码屏幕截图和录制有效。
 
 # 你说的不对 / 我还有问题
 
