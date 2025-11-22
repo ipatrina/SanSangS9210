@@ -923,6 +923,20 @@ settings delete secure disable_secure_windows
 
 已测试Chrome浏览器无痕模式、支付宝付款码屏幕截图和录制有效。
 
+---
+
+**31 屏幕亮度**
+
+当安卓应用控制并锁定屏幕亮度时，您可以直接操作内核驱动来强制调整。您还可以获取驱动最大屏幕亮度。
+
+```
+cat /sys/class/backlight/panel0-backlight/brightness
+
+cat /sys/class/backlight/panel0-backlight/max_brightness
+
+echo 100 > /sys/class/backlight/panel0-backlight/brightness
+```
+
 # 你说的不对 / 我还有问题
 
 提个Issue咯。
