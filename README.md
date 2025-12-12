@@ -834,7 +834,7 @@ WLAN配置存储于以下文件：
 修改"WifiConfigStore.xml"文件中的以下选项可在安卓系统层面自定义设备MAC地址：
 
 ```
-<string name="wifi_sta_factory_mac_address">aa:bb:cc:dd:ee:ff</string>
+sed -i 's#^<string name="wifi_sta_factory_mac_address">.*</string>#<string name="wifi_sta_factory_mac_address">aa:bb:cc:dd:ee:ff</string>#' /data/misc/apexdata/com.android.wifi/WifiConfigStore.xml
 ```
 
 修改后，必须使用以下命令生效：
@@ -843,7 +843,21 @@ WLAN配置存储于以下文件：
 pkill system_server
 ```
 
-生效后，建议您重启设备。
+参考文献(仅作为引用)：
+
+https://xdaforums.com/t/guide-how-to-configure-the-wifi-in-android-via-script.4548489
+
+笔者不很清楚该做法的生效原理。但其实这有关"WifiConfigStore.xml"参数的加载机制。
+
+当系统启动时，system_server从"WifiConfigStore.xml"加载参数。当用户普通关机时，system_server会将已加载至内存的参数写回"WifiConfigStore.xml"。
+
+也就是说，当用户手动编辑参数后，必须避免system_server重写"WifiConfigStore.xml"的过程。
+
+使用"echo b > /proc/sysrq-trigger"方式或物理按键强制重置设备，可避免system_server的重写过程，但同样可能导致磁盘缓存未同步，造成XML文件损坏。因此，强制重置设备前，需要执行"sync"。
+
+使用"reboot"命令也可避免system_server的重写过程，且这种生效方式相对和平。
+
+一旦XML文件损坏，system_server会重新从WLAN驱动读取设备MAC地址，否则采用XML中存储的WLAN MAC地址。
 
 - 随机MAC地址
 
