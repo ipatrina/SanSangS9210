@@ -501,7 +501,7 @@ https://android.googlesource.com/platform/system/core/+/master/init/selinux.cpp
 9. 使用tar命令将OUI8 BL解压目录重新打包为tar文件。
 
 ```
-tar -cf BL-patched.tar *
+tar -cf BL-patched.tar --exclude=BL-patched.tar *
 ```
 
 10. 使用Odin选择以下文件组合，刷入设备。(对于AP、CP、CSC，请选择您的实际版本文件。CSC文件必须以"HOME_CSC_"开头，否则会丢失用户数据。)
