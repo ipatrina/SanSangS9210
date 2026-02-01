@@ -953,6 +953,42 @@ cat /sys/class/backlight/panel0-backlight/max_brightness
 echo 100 > /sys/class/backlight/panel0-backlight/brightness
 ```
 
+---
+
+**32 数字健康**
+
+手机会为用户统计设备使用量数据。除了正常使用GUI操作禁用统计和重置数据外，也可直接通过命令来浏览或删除这些存储文件。
+
+```
+ls -l /data/system_ce/0/usagestats
+ls -l /data/system_ce/0/usagestats/daily
+ls -l /data/system_ce/0/usagestats/weekly
+ls -l /data/system_ce/0/usagestats/monthly
+ls -l /data/system_ce/0/usagestats/yearly
+```
+
+```
+rm /data/system_ce/0/usagestats/daily/*
+rm /data/system_ce/0/usagestats/weekly/*
+rm /data/system_ce/0/usagestats/monthly/*
+rm /data/system_ce/0/usagestats/yearly/*
+rm /data/system_ce/0/usagestats/mappings
+rm /data/system_ce/0/usagestats/migrated
+rm /data/system_ce/0/usagestats/version
+```
+
+请务必注意，不要删除任何文件夹。
+
+这些存储文件同样由system_server管理，因此，生效原理请参考章节27。
+
+通过移除"数字健康"APP(com.samsung.android.forest)，可以使"设置"APP中无法查看使用量数据。
+
+另外，可以通过以下命令重置网络流量使用量。
+
+```
+rm /data/misc/apexdata/com.android.tethering/netstats/*
+```
+
 # 你说的不对 / 我还有问题
 
 提个Issue咯。
