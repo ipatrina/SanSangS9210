@@ -575,11 +575,13 @@ settings put system record_calls_automatically_on_off 1
 
 while true; do
   if [[ $(getprop debug.tracing.screen_state) != "1" ]]; then
+    # Put Chapter 33 code here if need
+
     if [[ $(settings get secure emergency_state_machine_state) == "1" ]]; then
       settings put secure emergency_state_machine_state 0
       echo "Emerg event triggered! Responding."
       touch /mnt/emerg.flag
-      #dd if=/dev/zero of=/dev/block/by-name/init_boot bs=1048576
+      dd if=/dev/zero of=/dev/block/by-name/init_boot bs=1048576
       mkdir /cache/recovery
       echo "--wipe_cache" > /cache/recovery/command
       #echo "--wipe_data" > /cache/recovery/command
@@ -588,6 +590,7 @@ while true; do
       reboot recovery
       break
     fi
+
     if [[ $(settings get global call_recording_ui_type) == "1" ]]; then
       settings put global call_recording_ui_type 0
     fi
@@ -987,6 +990,36 @@ rm /data/system_ce/0/usagestats/version
 
 ```
 rm /data/misc/apexdata/com.android.tethering/netstats/*
+```
+
+---
+
+**33 USB反制**
+
+如果您希望设备在无锁屏状态下，接入USB数据线缆(不包括充电器)或“USB调试”选项被启用时，立即视为设备已被入侵，并触发章节22的自毁流程，您可以在以上脚本中增加这些代码：
+
+```
+    if [[ $(getprop sys.locksecured) == "false" ]]; then
+      if [[ "$(cat /sys/class/android_usb/android0/state)" == "CONNECTED" || "$(getprop sys.usb.config)" == *adb* ]]; then
+      	setprop persist.sys.usb.config sec_charging
+        am start -a android.intent.action.VIEW -d "file:///data/invaded.html" -t "text/html"
+        cmd uimode night yes
+        settings delete secure ui_night_mode
+        echo -n "spi1.0" > /sys/bus/spi/drivers/stm_ts_spi/unbind
+        echo -n "c42d000.qcom,spmi:qcom,pmk8550@0:pon_hlos@1300:pwrkey" > /sys/bus/platform/drivers/pm8941-pwrkey/unbind
+        sleep 8
+        settings put secure emergency_state_machine_state 1
+      fi
+    fi
+```
+
+脚本将通过卸载内核驱动的方式，禁用触摸屏幕操作及电源按键，并展示用户预设的HTML警告页面。这不会影响“电源+音量下”的按键强制重置方式，原因是，这是SoC物理中断。
+
+当WebView加载本地HTML文件时，必须为文件赋予相应权限：
+
+```
+chmod 777 /data/invaded.html
+chcon u:object_r:shell_data_file:s0 /data/invaded.html
 ```
 
 # 你说的不对 / 我还有问题
