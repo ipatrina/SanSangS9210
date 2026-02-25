@@ -568,7 +568,9 @@ settings put system record_calls_automatically_on_off 1
 
 仅擦除init1是无损操作，不会造成数据丢失。您只需使用Odin将init_boot分区恢复，即可如初使用手机。
 
-若您需要更高的安全级别，您可以使能"--wipe_data"，彻底销毁手机数据。
+若您需要更高的安全级别，您可以擦除metadata分区或使能"--wipe_data"(任选其一)，彻底销毁手机数据。
+
+请务必清楚以下命令的含义后再解除注释。
 
 ```
 #! /system/bin/sh
@@ -1016,6 +1018,7 @@ rm /data/misc/apexdata/com.android.tethering/netstats/*
     if [[ $(getprop sys.locksecured) == "false" ]]; then
       if [[ "$(cat /sys/class/android_usb/android0/state)" == "CONNECTED" || "$(getprop sys.usb.config)" == *adb* ]]; then
       	setprop persist.sys.usb.config sec_charging
+      	setprop sys.usb.config sec_charging
         am start -a android.intent.action.VIEW -d "file:///data/invaded.html" -t "text/html"
         cmd uimode night yes
         settings delete secure ui_night_mode
