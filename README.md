@@ -575,13 +575,14 @@ settings put system record_calls_automatically_on_off 1
 
 while true; do
   if [[ $(getprop debug.tracing.screen_state) != "1" ]]; then
-    # Put Chapter 33 code here if need
+    # Put Chapter 33 code here if needed
 
     if [[ $(settings get secure emergency_state_machine_state) == "1" ]]; then
       settings put secure emergency_state_machine_state 0
       echo "Emerg event triggered! Responding."
       touch /mnt/emerg.flag
-      dd if=/dev/zero of=/dev/block/by-name/init_boot bs=1048576
+      #dd if=/dev/zero of=/dev/block/by-name/init_boot bs=1048576
+      #dd if=/dev/zero of=/dev/block/by-name/metadata bs=1048576
       mkdir /cache/recovery
       echo "--wipe_cache" > /cache/recovery/command
       #echo "--wipe_data" > /cache/recovery/command
@@ -598,6 +599,19 @@ while true; do
   sleep 1
 done
 ```
+
+![Emergency preview](https://thumbs2.imgbox.com/46/8e/L5HGyLtO_t.jpg)
+
+您可以在"/data/user_de/0/com.samsung.android.emergency/shared_prefs/com.samsung.android.emergency_pref.xml"文件中自定义显示的紧急号码：
+
+```
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <string name="emergency_selected_number">设备立即自毁</string>
+    <string name="emergency_custom_number">设备立即自毁</string>
+</map>
+```
+
 ---
 
 **23 查找我的女朋友**
