@@ -1039,6 +1039,22 @@ chmod 777 /data/invaded.html
 chcon u:object_r:shell_data_file:s0 /data/invaded.html
 ```
 
+---
+
+**34 来自未经验证的开发者的应用**
+
+允许安装未经验证的开发者提供的应用：
+
+```
+echo -en "\x32\x00" > /data/data/com.google.android.verifier/files/warn_mode_state.pb
+```
+
+去使能：
+
+```
+echo -en "\x0a\x00" > /data/data/com.google.android.verifier/files/warn_mode_state.pb
+```
+
 # 你说的不对 / 我还有问题
 
 提个Issue咯。
