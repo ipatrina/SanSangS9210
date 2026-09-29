@@ -577,7 +577,7 @@ settings put system record_calls_automatically_on_off 1
 
 while true; do
   if [[ $(getprop debug.tracing.screen_state) != "1" ]]; then
-    # Put Chapter 33 code here if needed
+    # Put Chapter 33/35 code here if needed
 
     if [[ $(settings get secure emergency_state_machine_state) == "1" ]]; then
       settings put secure emergency_state_machine_state 0
@@ -1053,6 +1053,39 @@ echo -en "\x32\x00" > /data/data/com.google.android.verifier/files/warn_mode_sta
 
 ```
 echo -en "\x0a\x00" > /data/data/com.google.android.verifier/files/warn_mode_state.pb
+```
+
+---
+
+**35 拦截号码**
+
+您可以在章节22脚本相应位置增加这些代码，实现基于来电号码前缀的骚扰拦截（高通）：
+
+```
+    if [ "$(getprop ril.dds.call.ongoing0)" == "1" ]; then
+      dumpsys telephony.registry | grep -qE "mCallIncomingNumber=(0591|170|171)" && input keyevent 6
+      while [ "$(getprop ril.dds.call.ongoing0)" == "1" ]; do sleep 6; done
+    fi
+```
+
+此外，您还可以通过以下命令来管理系统的拦截号码列表。
+
+列出：
+
+```
+/data/sqlite3 -csv -header /data/user_de/0/com.android.providers.blockednumber/databases/blockednumbers.db "SELECT * FROM blocked;"
+```
+
+批量添加：
+
+```
+for i in $(seq 62000001 62000010); do /data/sqlite3 /data/user_de/0/com.android.providers.blockednumber/databases/blockednumbers.db "INSERT INTO blocked (original_number, e164_number) VALUES ('0591$i', '+86591$i');"; done
+```
+
+批量删除：
+
+```
+/data/sqlite3 /data/user_de/0/com.android.providers.blockednumber/databases/blockednumbers.db "DELETE FROM blocked WHERE original_number LIKE '0591620%';"
 ```
 
 # 你说的不对 / 我还有问题
